@@ -1,0 +1,24 @@
+# Basic Settings
+url <- 'https://d396qusza40orc.cloudfront.net/exdata%2Fdata%2FNEI_data.zip'
+download.file(url, 'PA2.zip', method ="curl")
+unzip('PA2.zip')
+setwd("./PA2")
+
+# Importing Data (This first line will likely take a few seconds)
+if(!exists("NEI")){
+	NEI <- readRDS("summarySCC_PM25.rds")
+}
+if(!exists("SCC")){
+	SCC <- readRDS("Source_Classification_Code.rds")
+}
+
+
+ans1 <- aggregate(Emissions ~ year, NEI, sum)
+
+png('plot1.png')
+barplot(height=ans1$Emissions, 
+		names.arg=ans1$year, 
+		xlab="years", 
+		ylab=expression('total PM'[2.5]*' emission'), 
+		main=expression('Total PM'[2.5]*' emissions'))
+dev.off()
